@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../../../common/entities/user.entity';
-import { UserRepository } from '../../../common/repositories/user.repository.interface';
+import {
+  UserRepository,
+  PaginationOptions,
+  PaginatedResult,
+} from '../../../common/repositories/user.repository.interface';
 import { PrismaService } from '../../database/prisma.service';
 import { User as PrismaUser } from '../../../../generated/prisma';
 
@@ -39,6 +43,24 @@ export class PrismaUserRepository implements UserRepository {
     });
 
     return this.mapPrismaToDomain(prismaUser);
+  }
+
+  async findAll(options: PaginationOptions): Promise<PaginatedResult<User>> {
+    const { page, limit } = options;
+    const skip = (page - 1) * limit;
+
+    const [users, total] = await Promise.all([
+      this.prisma.user.findMany({
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.user.count(),
+    ]);
+
+    const data = users.map((user) => this.mapPrismaToDomain(user));
+
+    return { data, total };
   }
 
   private mapDomainToPrisma(user: User): Omit<PrismaUser, 'id'> {

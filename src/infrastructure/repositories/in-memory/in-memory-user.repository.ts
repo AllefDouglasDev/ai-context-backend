@@ -1,5 +1,9 @@
 import { User } from '../../../common/entities/user.entity';
-import { UserRepository } from '../../../common/repositories/user.repository.interface';
+import {
+  UserRepository,
+  PaginationOptions,
+  PaginatedResult,
+} from '../../../common/repositories/user.repository.interface';
 
 export class InMemoryUserRepository implements UserRepository {
   private users: User[] = [];
@@ -45,6 +49,17 @@ export class InMemoryUserRepository implements UserRepository {
 
     this.users[index] = updatedUser;
     return updatedUser;
+  }
+
+  async findAll(options: PaginationOptions): Promise<PaginatedResult<User>> {
+    const { page, limit } = options;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    const data = this.users.slice(startIndex, endIndex);
+    const total = this.users.length;
+
+    return { data, total };
   }
 
   clear(): void {
