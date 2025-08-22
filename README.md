@@ -1,73 +1,81 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Context Engineering Configuration Repository
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This repository contains context engineering configurations and documentation for a Node.js/NestJS application backend. It serves as a centralized location for storing architectural decisions, development processes, and engineering principles that guide the development of the application.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Purpose
 
-## Description
+This project is designed to maintain and organize the context engineering configurations that help AI assistants and development teams understand the project structure, principles, and processes. The configurations ensure consistent development practices and architectural decisions across the application lifecycle.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Repository Structure
 
-## Installation
+### PRD Directory
+
+The `PRD/` directory contains the core documentation and configuration files:
+
+- **Architecture definitions** - System design and architectural patterns
+- **Development processes** - Workflows and development methodologies  
+- **Engineering principles** - SOLID, KISS, YAGNI guidelines and best practices
+- **Project requirements** - Functional and non-functional specifications
+
+### Key Files
+
+- `CLAUDE.md` - Main configuration file for AI assistant context and project guidance
+- Development command references and testing strategies
+- TypeScript and linting configurations
+
+## Development Commands
 
 ```bash
-$ npm install
+# Install dependencies
+npm install
+
+# Development server (with file watching)
+npm run start:dev
+
+# Production build
+npm run build
+
+# Start production server
+npm run start:prod
+
+# Linting and formatting
+npm run lint
+npm run format
+
+# Testing
+npm run test           # Unit tests
+npm run test:watch     # Watch mode for unit tests
+npm run test:e2e       # End-to-end tests
+npm run test:cov       # Test coverage report
 ```
 
-## Running the app
+## Usage
 
-```bash
-# development
-$ npm run start
+This repository serves as a reference for:
 
-# watch mode
-$ npm run start:dev
+1. **Development Teams** - Understanding project architecture and processes
+2. **AI Assistants** - Providing context for code generation and modifications
+3. **Code Reviews** - Ensuring adherence to established principles and patterns
+4. **Onboarding** - New team members can quickly understand project standards
 
-# production mode
-$ npm run start:prod
-```
+## Configuration Files
 
-## Test
+The context engineering configurations help maintain:
 
-```bash
-# unit tests
-$ npm run test
+- Consistent code architecture patterns
+- Adherence to software engineering principles
+- Standardized development workflows
+- Quality assurance processes
+- Testing strategies and methodologies
 
-# e2e tests
-$ npm run test:e2e
+## Technology Stack
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Runtime**: Node.js
+- **Framework**: NestJS (TypeScript)
+- **Testing**: Jest, Supertest
+- **Code Quality**: ESLint, Prettier
+- **Build System**: TypeScript Compiler
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+MIT Licensed
