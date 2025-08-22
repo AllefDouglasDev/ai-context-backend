@@ -8,6 +8,17 @@ import {
   HttpStatus,
   HttpException,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBearerAuth,
+  ApiUnauthorizedResponse,
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiInternalServerErrorResponse,
+} from '@nestjs/swagger';
 import { RegisterUserUseCase } from './usecases/register-user.usecase';
 import { LoginUserUseCase } from './usecases/login-user.usecase';
 import { RefreshTokenUseCase } from './usecases/refresh-token.usecase';
@@ -18,6 +29,7 @@ import { AuthResponseDTO } from './dto/auth-response.dto';
 import { UserResponseDTO } from './dto/user-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+@ApiTags('authentication')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -27,6 +39,48 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiBody({ type: RegisterUserDTO })
+  @ApiResponse({
+    status: 201,
+    description: 'User successfully registered',
+    type: UserResponseDTO,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid input data',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Invalid email format',
+        },
+        statusCode: {
+          type: 'number',
+          example: 400,
+        },
+      },
+    },
+  })
+  @ApiConflictResponse({
+    description: 'Email already exists',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Email already exists',
+        },
+        statusCode: {
+          type: 'number',
+          example: 409,
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
   async register(@Body() dto: RegisterUserDTO): Promise<UserResponseDTO> {
     try {
       const result = await this.registerUserUseCase.execute({
@@ -53,6 +107,32 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'Login user and get tokens' })
+  @ApiBody({ type: LoginUserDTO })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully logged in',
+    type: AuthResponseDTO,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Invalid credentials',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Invalid credentials',
+        },
+        statusCode: {
+          type: 'number',
+          example: 401,
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
   async login(@Body() dto: LoginUserDTO): Promise<AuthResponseDTO> {
     try {
       const result = await this.loginUserUseCase.execute({
@@ -73,11 +153,72 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'User profile retrieved successfully',
+    type: UserResponseDTO,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized - Invalid or missing token',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Unauthorized',
+        },
+        statusCode: {
+          type: 'number',
+          example: 401,
+        },
+      },
+    },
+  })
   async getProfile(@Request() req): Promise<UserResponseDTO> {
     return UserResponseDTO.create(req.user);
   }
 
   @Post('refresh')
+  @ApiOperation({ summary: 'Refresh access token using refresh token' })
+  @ApiBody({ type: RefreshTokenDTO })
+  @ApiResponse({
+    status: 200,
+    description: 'Tokens refreshed successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        access_token: {
+          type: 'string',
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+        },
+        refresh_token: {
+          type: 'string',
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+        },
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Invalid or expired refresh token',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Invalid or expired refresh token',
+        },
+        statusCode: {
+          type: 'number',
+          example: 401,
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
   async refresh(
     @Body() dto: RefreshTokenDTO,
   ): Promise<Omit<AuthResponseDTO, 'user'>> {
